@@ -1,975 +1,586 @@
-# Todos los cambios pendientes, en orden (desde el zip del 7 de noviembre)
+# Datos de prueba con temática Cenfotec (Leonardo, Donatello, Rafael y Miguel)
 
-Parto del último zip que subiste, que ya tiene hechos los pasos 1 y 2 del plan: "Ver como" eliminado y la
-colección solo con JWT. Este documento **reemplaza** a los otros como lista de trabajo. `Plan-final-entrega.md`,
-`Simplificacion-segun-practicas.md` y `Validacion-sin-zod.md` quedan solo como explicación.
+**Qué cambia:** el contenido del seed y la colección de Postman. El código de la aplicación no cambia, salvo un
+texto de ejemplo y un comentario.
 
-**Ya lo probé:** apliqué los pasos 1 a 4 en una copia de tu zip.
+**Qué se mantiene igual, a propósito:**
+- Los ids de MongoDB: personas, iniciativas, solicitudes y proyecto.
+- Quién es dueño de qué, la visibilidad, los estados, los equipos, el cupo y las solicitudes.
+
+Por eso todas las reglas siguen dando el mismo resultado, y las demostraciones de la guía funcionan con los nombres nuevos.
+
+**Ya lo probé en una copia de tu último zip:**
+- Los datos nuevos pasan los validadores reales, y cada solicitud ofrece una competencia de la intersección.
+- `npm run seed` carga los 4 usuarios nuevos.
 - Newman da **78 peticiones, 258 aserciones y 0 fallos**.
-- El lint da **0 errores** y las 3 advertencias conocidas.
-- El **build** compila.
+- El lint da 0 errores (las 3 advertencias de siempre) y el build compila.
+- El catálogo se ve bien en el navegador.
 
-| Hoy, sábado 7 | Mañana, domingo 8 |
-|---|---|
-| Pasos 1 a 8: código, documentación y revisión (unas 3 a 4 horas) | Pasos 10 a 13: clon limpio, etiqueta y Moodle |
-| Paso 9: ensayo de la defensa | Paso 14: dejar todo listo |
+## Importante: ¿ya creaste la etiqueta `entrega-2`?
 
-**No hacer:** el antiguo Paso 4 (`SelectorChips`). La confirmación al quitar una competencia es una
-corrección del profesor.
+- **Si ya la creaste y entregaste:** haz estos cambios igual en `main`, después de la etiqueta. La etiqueta sigue
+  apuntando al commit entregado, que es lo que se evalúa, y en la defensa demuestras con los datos nuevos. Si el
+  profesor pregunta, la respuesta es: "Después de la entrega solo cambié el contenido del seed y la colección; el
+  código y el contrato son los mismos de la etiqueta."
+- **Si todavía no la creaste:** hazlos antes de crear la etiqueta y sigue con los pasos 10 a 14 de `Pasos-finales.md`.
 
----
+## Quién es quién
 
-## Paso 0 · Antes de empezar
+| Antes | Ahora | Correo | Tipo y carrera | Competencias |
+|---|---|---|---|---|
+| Ana Mora | **Leonardo Brenes Arias** | `leonardo.brenes@ucenfotec.ac.cr` | Estudiante · Ingeniería del Software | Desarrollo web (avanzado), Gestión ágil (intermedio) |
+| Luis Pérez | **Donatello Quirós** | `donatello.quiros@ucenfotec.ac.cr` | Docente · Ciberseguridad | Análisis de datos, Redes y sistemas operativos |
+| María Solís | **Rafael Montero Chaves** | `rafael.montero@ucenfotec.ac.cr` | Estudiante · Ingeniería en Ciberseguridad | Gestión ágil, Ciberseguridad (avanzado), Análisis de datos (básico) |
+| Diego Vargas | **Miguel Solano** | `miguel.solano@ucenfotec.ac.cr` | Administrativo · Tecnologías de Información | Cloud y DevOps (avanzado), Diseño UX/UI (básico) |
 
-En PowerShell, en la raíz del repo:
+La contraseña de todos sigue siendo `Prueba123!`.
 
-```powershell
-git status          # debe decir "nothing to commit"; si no, haz commit o descarta antes
-git pull
-node -v             # tiene que ser v20.6 o más nuevo (para --env-file)
-```
+| # | Antes | Ahora | Dueño | Visibilidad · estado | Para demostrar |
+|---|---|---|---|---|---|
+| 01 | Voluntariado | **Plataforma de mentorías de programación** | Leonardo (con Donatello) | pública · forming | Aceptar la solicitud pendiente de Rafael; archivar en vez de eliminar |
+| 02 | Monitoreo de energía | **Monitoreo de la red de los laboratorios** | Donatello (con Leonardo y Rafael) | pública · project | Proyecto con GitHub |
+| 03 | Tutorías | **Grupos de estudio para certificaciones de seguridad** | Rafael | institucional · published | 401 para visitantes |
+| 04 | Reciclaje | **Galería web de proyectos de graduación** | Leonardo | pública · published | Eliminar (sin relaciones) |
+| 05 | Soporte TI | **Reducir el tiempo de atención de la mesa de ayuda** | Miguel | restringida · published | Solo resumen para terceros |
+| 06 | Coworking | **Laboratorio de práctica en la nube** | Donatello (con Miguel) | pública · forming | Solicitar como Rafael, retirar a Miguel, convertir |
+| 07 | Bienestar | **Gestor de contraseñas para el grupo de investigación** | Rafael (con Leonardo) | privada · forming | 404 para terceros |
+| 08 | Festival | **CTF interuniversitario de ciberseguridad** | Miguel | pública · published | Convertir sin miembros → 409 `NO_MEMBERS` |
 
-- Si `node -v` da menos de 20.6, **salta el Paso 2**. Todo lo demás funciona igual.
-- **Cómo probar después de cada paso de código:**
-  - Terminal 1, en `servidor`: `npm start`. Espera a ver `API escuchando`.
-  - Terminal 2, en `servidor`: `npm run test:api`. Tiene que dar 78 peticiones y 0 fallos.
-  - Usa `npm start` y no `npm run dev`, para que un reinicio no tumbe la prueba.
-  - Detén la terminal 1 con `Ctrl+C` antes de editar el siguiente paso.
-- Si después de un commit `git status` muestra `README.md` modificado, es tu script de la tabla de commits.
-  Inclúyelo en el commit siguiente.
+**Categorías:**
+- Desarrollo de software
+- Ciberseguridad
+- Sistemas e infraestructura
+- Diseño y experiencia digital
+- Educación y mentorías
+- Emprendimiento tecnológico
+- Impacto social
+- Otro
 
----
-
-## Paso 1 · Contrato: miembros sin filtros y login sin límite de intentos
-
-**1.1 `servidor/src/routes/iniciativas.routes.js`**
-
-Línea 5, el import queda así (sin `consultaMiembros`):
-
-```js
-import { consultaIniciativas, cuerpoIniciativa } from '../validators/iniciativas.schemas.js';
-```
-
-Línea 15, la ruta de miembros queda así:
-
-```js
-router.get('/initiatives/:id/members', c.miembros);
-```
-
-**1.2 `servidor/src/controllers/iniciativas.controller.js`**, función `miembros`:
-
-```js
-export async function miembros(req, res) {
-  res.json(await servicio.listarMiembros(req.params.id, req.usuario));
-}
-```
-
-**1.3 `servidor/src/services/iniciativas.service.js`**: reemplaza la función `listarMiembros` completa por:
-
-```js
-export async function listarMiembros(id, usuario) {
-  const { ini, nivel } = await cargarVisible(id, usuario);
-  if (nivel !== 'full') throw ErrorApi.prohibido('No tenés acceso al equipo de esta iniciativa.');
-  const ctx = await contextoIniciativas([ini], usuario);
-  return ini.members.map((m) => serializarMiembro(m, ctx));
-}
-```
-
-**1.4 Quitar el límite de login**
-
-```powershell
-Remove-Item servidor\src\middleware\limiteLogin.js
-cd servidor
-npm uninstall express-rate-limit
-cd ..
-```
-
-En `servidor/src/routes/auth.routes.js`, borra esta línea:
-
-```js
-import { limiteLogin } from '../middleware/limiteLogin.js';
-```
-
-y deja la ruta de login así:
-
-```js
-router.post('/auth/login', validar({ body: cuerpoLogin }), c.login);
-```
-
-**1.5 `docs/api-contract.md`**
-- Tabla 1.3 (línea 69 aprox.): borra la fila `| 429 | TOO_MANY_REQUESTS | … |`.
-- Fila `POST /auth/login` (línea 197 aprox.): al final, `400, 401 INVALID_CREDENTIALS` (sin `, 429`).
-- Fila `GET /initiatives/{id}/members` (línea 232 aprox.): en la columna de parámetros, `—` en lugar
-  de `` `skill`, `role` ``.
-
-**1.6 Probar** (78 / 0) **y hacer el commit**
-
-```powershell
-git add -A servidor docs\api-contract.md
-git commit -m "Ajustar el contrato al alcance del Avance 2: sin filtros de miembros ni límite de login" --trailer "Seccion: Contrato" --trailer "Cambio: GET members sin parámetros; se elimina el 429 y express-rate-limit"
-```
+**Competencias:**
+- Desarrollo web
+- Diseño UX/UI
+- Diseño gráfico
+- Análisis de datos
+- Gestión ágil (Scrum)
+- Redes y sistemas operativos
+- Cloud y DevOps
+- Ciberseguridad y hacking ético
 
 ---
 
-## Paso 2 · Cargar el `.env` con `--env-file`, como en las prácticas
+## Paso 1 · Reemplazar los 7 archivos de `servidor/src/seed/datos/`
 
-**2.1 `servidor/src/config/env.js`**: borra la línea 1:
+Abre cada archivo, selecciona todo (`Ctrl+A`) y pega el contenido completo de abajo.
 
-```js
-import 'dotenv/config';
-```
-
-**2.2 `servidor/package.json`**: deja `scripts` exactamente así:
+### `servidor/src/seed/datos/categories.json`
 
 ```json
-  "scripts": {
-    "dev": "node --env-file=.env --watch src/server.js",
-    "start": "node --env-file=.env src/server.js",
-    "seed": "node --env-file=.env src/seed/seed.js",
-    "test:api": "node --env-file=.env src/seed/seed.js && newman run ../pruebas/innovation-hub.postman_collection.json -e ../pruebas/innovation-hub.postman_environment.json"
-  },
+[
+  { "id": "cat-software", "name": "Desarrollo de software", "icon": "bi-code-slash" },
+  { "id": "cat-ciberseguridad", "name": "Ciberseguridad", "icon": "bi-shield-lock" },
+  { "id": "cat-sistemas", "name": "Sistemas e infraestructura", "icon": "bi-hdd-network" },
+  { "id": "cat-diseno", "name": "Diseño y experiencia digital", "icon": "bi-palette" },
+  { "id": "cat-educacion", "name": "Educación y mentorías", "icon": "bi-mortarboard" },
+  { "id": "cat-emprendimiento", "name": "Emprendimiento tecnológico", "icon": "bi-rocket-takeoff" },
+  { "id": "cat-impacto-social", "name": "Impacto social", "icon": "bi-people" },
+  { "id": "cat-otro", "name": "Otro", "icon": "bi-three-dots" }
+]
 ```
 
-**2.3 Desinstalar `dotenv`**
+### `servidor/src/seed/datos/skills.json`
 
-```powershell
-cd servidor
-npm uninstall dotenv
-cd ..
+```json
+[
+  { "id": "comp-desarrollo-web", "name": "Desarrollo web (JavaScript y React)", "area": "Desarrollo" },
+  { "id": "comp-diseno-ux", "name": "Diseño UX/UI", "area": "Diseño" },
+  { "id": "comp-diseno-grafico", "name": "Diseño gráfico y multimedia", "area": "Diseño" },
+  { "id": "comp-analisis-datos", "name": "Análisis de datos", "area": "Datos" },
+  { "id": "comp-gestion-agil", "name": "Gestión ágil (Scrum)", "area": "Gestión" },
+  { "id": "comp-redes", "name": "Redes y sistemas operativos", "area": "Infraestructura" },
+  { "id": "comp-cloud", "name": "Cloud y DevOps", "area": "Infraestructura" },
+  { "id": "comp-ciberseguridad", "name": "Ciberseguridad y hacking ético", "area": "Seguridad" }
+]
 ```
 
-**2.4 Probar** (78 / 0) **y hacer el commit**
+### `servidor/src/seed/datos/roles.json`
 
-```powershell
-git add servidor\src\config\env.js servidor\package.json servidor\package-lock.json
-git commit -m "Cargar el .env con --env-file de Node en lugar de dotenv" --trailer "Seccion: Servidor" --trailer "Cambio: Se elimina dotenv; los scripts cargan el .env con la opción nativa de Node, como en las prácticas"
+```json
+[
+  { "id": "rol-frontend", "name": "Desarrollo frontend" },
+  { "id": "rol-backend", "name": "Desarrollo backend" },
+  { "id": "rol-ux", "name": "Diseño UX/UI" },
+  { "id": "rol-datos", "name": "Análisis de datos" },
+  { "id": "rol-coordinacion", "name": "Scrum Master / coordinación" },
+  { "id": "rol-comunicacion", "name": "Documentación y difusión" },
+  { "id": "rol-investigacion", "name": "Investigación" },
+  { "id": "rol-infraestructura", "name": "Infraestructura y seguridad" }
+]
+```
+
+### `servidor/src/seed/datos/users.json`
+
+```json
+[
+  { "id": "650000000000000000000001", "firstName": "Leonardo", "lastName": "Brenes", "secondLastName": "Arias",
+    "email": "leonardo.brenes@ucenfotec.ac.cr", "memberType": "student", "career": "Ingeniería del Software",
+    "bio": "Cuarto cuatrimestre. Me interesa el desarrollo web y armar comunidades técnicas en Cenfotec.",
+    "skills": [ { "skillId": "comp-desarrollo-web", "level": "advanced" }, { "skillId": "comp-gestion-agil", "level": "intermediate" } ],
+    "interests": ["software", "mentorías"], "availability": { "hoursPerWeek": 6, "detail": "tardes y fines de semana" },
+    "portfolioUrl": "https://github.com/leonardobrenes", "status": "active",
+    "createdAt": "2026-09-01T14:00:00.000Z", "updatedAt": "2026-09-20T14:00:00.000Z" },
+
+  { "id": "650000000000000000000002", "firstName": "Donatello", "lastName": "Quirós", "secondLastName": null,
+    "email": "donatello.quiros@ucenfotec.ac.cr", "memberType": "teacher", "career": "Ciberseguridad",
+    "bio": "Docente de redes y seguridad. Busco proyectos aplicados para mis cursos.",
+    "skills": [ { "skillId": "comp-analisis-datos", "level": "advanced" }, { "skillId": "comp-redes", "level": "advanced" } ],
+    "interests": ["redes", "monitoreo"], "availability": { "hoursPerWeek": 4, "detail": "martes y jueves" },
+    "portfolioUrl": null, "status": "active",
+    "createdAt": "2026-09-01T14:00:00.000Z", "updatedAt": "2026-09-01T14:00:00.000Z" },
+
+  { "id": "650000000000000000000003", "firstName": "Rafael", "lastName": "Montero", "secondLastName": "Chaves",
+    "email": "rafael.montero@ucenfotec.ac.cr", "memberType": "student", "career": "Ingeniería en Ciberseguridad",
+    "bio": "Coordino el grupo estudiantil de seguridad informática.",
+    "skills": [ { "skillId": "comp-gestion-agil", "level": "intermediate" }, { "skillId": "comp-ciberseguridad", "level": "advanced" }, { "skillId": "comp-analisis-datos", "level": "basic" } ],
+    "interests": ["hacking ético", "certificaciones"], "availability": { "hoursPerWeek": 3, "detail": "mañanas" },
+    "portfolioUrl": null, "status": "active",
+    "createdAt": "2026-09-02T14:00:00.000Z", "updatedAt": "2026-09-02T14:00:00.000Z" },
+
+  { "id": "650000000000000000000004", "firstName": "Miguel", "lastName": "Solano", "secondLastName": null,
+    "email": "miguel.solano@ucenfotec.ac.cr", "memberType": "staff", "career": "Tecnologías de Información",
+    "bio": "",
+    "skills": [ { "skillId": "comp-cloud", "level": "advanced" }, { "skillId": "comp-diseno-ux", "level": "basic" } ],
+    "interests": ["infraestructura"], "availability": { "hoursPerWeek": 0, "detail": "" },
+    "portfolioUrl": "https://github.com/miguelsolano", "status": "active",
+    "createdAt": "2026-09-03T14:00:00.000Z", "updatedAt": "2026-09-03T14:00:00.000Z" }
+]
+```
+
+### `servidor/src/seed/datos/initiatives.json`
+
+```json
+[
+  { "id": "660000000000000000000001", "title": "Plataforma de mentorías de programación", "type": "idea",
+    "summary": "Conectar estudiantes avanzados de software con quienes empiezan a programar.",
+    "description": "Hoy las mentorías se coordinan por chat y dependen de conocidos. Proponemos una plataforma para publicar horarios, emparejar mentores por tecnología y registrar las sesiones.",
+    "problem": "Los estudiantes de primer ingreso no saben a quién pedir ayuda fuera de clase.",
+    "beneficiaries": "Estudiantes de primer ingreso de las carreras de software.",
+    "categoryId": "cat-educacion", "requiredSkillIds": ["comp-desarrollo-web", "comp-diseno-ux", "comp-gestion-agil"],
+    "estimatedMembers": 4, "visibility": "public", "tags": ["mentorías", "programación"],
+    "ownerId": "650000000000000000000001",
+    "members": [ { "userId": "650000000000000000000002", "roleId": "rol-backend", "joinedAt": "2026-09-12T15:00:00.000Z" } ],
+    "status": "forming", "createdAt": "2026-09-08T15:00:00.000Z", "updatedAt": "2026-09-20T15:00:00.000Z" },
+
+  { "id": "660000000000000000000002", "title": "Monitoreo de la red de los laboratorios", "type": "challenge",
+    "summary": "Tablero en tiempo real del tráfico y la disponibilidad de la red de los laboratorios.",
+    "description": "Cuando la red de un laboratorio se satura o se cae, el área de TI se entera por los estudiantes. Se busca un sistema de monitoreo con alertas tempranas.",
+    "problem": "Caídas y saturación de la red sin datos para prevenirlas.",
+    "beneficiaries": "Estudiantes, docentes y el área de TI.",
+    "categoryId": "cat-sistemas", "requiredSkillIds": ["comp-analisis-datos", "comp-redes", "comp-desarrollo-web"],
+    "estimatedMembers": 3, "visibility": "public", "tags": ["redes", "monitoreo"],
+    "ownerId": "650000000000000000000002",
+    "members": [
+      { "userId": "650000000000000000000001", "roleId": "rol-frontend", "joinedAt": "2026-09-11T15:00:00.000Z" },
+      { "userId": "650000000000000000000003", "roleId": "rol-datos", "joinedAt": "2026-09-11T15:00:00.000Z" } ],
+    "status": "project", "createdAt": "2026-08-30T15:00:00.000Z", "updatedAt": "2026-09-20T15:00:00.000Z" },
+
+  { "id": "660000000000000000000003", "title": "Grupos de estudio para certificaciones de seguridad", "type": "need",
+    "summary": "Preparación entre pares para Security+, CCNA y CEH.",
+    "description": "Muchos estudiantes quieren certificarse, pero estudian solos y abandonan. Se busca organizar grupos semanales con simulacros y laboratorios prácticos.",
+    "problem": "Baja tasa de aprobación de certificaciones por falta de acompañamiento.",
+    "beneficiaries": "Estudiantes de Ciberseguridad y de Redes.",
+    "categoryId": "cat-ciberseguridad", "requiredSkillIds": ["comp-gestion-agil", "comp-ciberseguridad"],
+    "estimatedMembers": 5, "visibility": "institutional", "tags": ["certificaciones", "tutorías"],
+    "ownerId": "650000000000000000000003", "members": [],
+    "status": "published", "createdAt": "2026-09-10T15:00:00.000Z", "updatedAt": "2026-09-10T15:00:00.000Z" },
+
+  { "id": "660000000000000000000004", "title": "Galería web de proyectos de graduación", "type": "idea",
+    "summary": "Un sitio para mostrar los proyectos finales de todas las carreras de Cenfotec.",
+    "description": "Los proyectos de graduación se presentan una vez y se pierden. Proponemos una galería pública con capturas, video y enlace al repositorio de cada proyecto.",
+    "problem": "El trabajo de los estudiantes no queda visible para empresas ni para nuevas generaciones.",
+    "beneficiaries": "Estudiantes que buscan empleo y futuros estudiantes.",
+    "categoryId": "cat-diseno", "requiredSkillIds": ["comp-desarrollo-web", "comp-diseno-grafico"],
+    "estimatedMembers": 3, "visibility": "public", "tags": ["portafolio", "graduación"],
+    "ownerId": "650000000000000000000001", "members": [],
+    "status": "published", "createdAt": "2026-09-14T15:00:00.000Z", "updatedAt": "2026-09-14T15:00:00.000Z" },
+
+  { "id": "660000000000000000000005", "title": "Reducir el tiempo de atención de la mesa de ayuda", "type": "challenge",
+    "summary": "Optimizar el proceso de tiquetes de soporte técnico del campus.",
+    "description": "El tiempo promedio de resolución de un tiquete supera las 48 horas. Se busca analizar los tiquetes históricos para clasificar y priorizar mejor.",
+    "problem": "Insatisfacción de estudiantes y docentes por demoras en soporte técnico.",
+    "beneficiaries": "Personal administrativo, docentes y estudiantes.",
+    "categoryId": "cat-sistemas", "requiredSkillIds": ["comp-analisis-datos"],
+    "estimatedMembers": 2, "visibility": "restricted", "tags": ["soporte", "procesos"],
+    "ownerId": "650000000000000000000004", "members": [],
+    "status": "published", "createdAt": "2026-09-12T15:00:00.000Z", "updatedAt": "2026-09-18T15:00:00.000Z" },
+
+  { "id": "660000000000000000000006", "title": "Laboratorio de práctica en la nube", "type": "need",
+    "summary": "Un entorno compartido en la nube para practicar DevOps sin costo.",
+    "description": "Los cursos de infraestructura necesitan servidores para practicar despliegues, pero cada estudiante paga su propia cuenta. Se busca un laboratorio común con cuotas y plantillas listas.",
+    "problem": "Practicar en la nube es caro y cada curso arma su entorno desde cero.",
+    "beneficiaries": "Estudiantes de Sistemas, Redes y Desarrollo de Software.",
+    "categoryId": "cat-sistemas", "requiredSkillIds": ["comp-gestion-agil", "comp-cloud"],
+    "estimatedMembers": 6, "visibility": "public", "tags": ["cloud", "devops"],
+    "ownerId": "650000000000000000000002",
+    "members": [ { "userId": "650000000000000000000004", "roleId": "rol-infraestructura", "joinedAt": "2026-09-13T15:00:00.000Z" } ],
+    "status": "forming", "createdAt": "2026-09-05T15:00:00.000Z", "updatedAt": "2026-09-13T15:00:00.000Z" },
+
+  { "id": "660000000000000000000007", "title": "Gestor de contraseñas para el grupo de investigación", "type": "idea",
+    "summary": "Herramienta privada para compartir credenciales del laboratorio de forma segura.",
+    "description": "Las credenciales de los equipos del laboratorio se comparten por chat. Se propone un gestor cifrado con permisos por persona y registro de accesos.",
+    "problem": "Credenciales compartidas sin control ni trazabilidad.",
+    "beneficiaries": "Integrantes del grupo de investigación en seguridad.",
+    "categoryId": "cat-ciberseguridad", "requiredSkillIds": ["comp-diseno-ux", "comp-desarrollo-web"],
+    "estimatedMembers": 3, "visibility": "private", "tags": ["seguridad", "contraseñas"],
+    "ownerId": "650000000000000000000003",
+    "members": [ { "userId": "650000000000000000000001", "roleId": "rol-frontend", "joinedAt": "2026-09-17T15:00:00.000Z" } ],
+    "status": "forming", "createdAt": "2026-09-16T15:00:00.000Z", "updatedAt": "2026-09-19T15:00:00.000Z" },
+
+  { "id": "660000000000000000000008", "title": "CTF interuniversitario de ciberseguridad", "type": "challenge",
+    "summary": "Organizar una competencia Capture the Flag abierta a otras universidades.",
+    "description": "Los estudiantes practican retos de seguridad por su cuenta. Se busca organizar un CTF anual con retos propios, tabla de posiciones e identidad visual del evento.",
+    "problem": "No hay un espacio para que los estudiantes midan sus habilidades de seguridad con otras universidades.",
+    "beneficiaries": "Estudiantes de Ciberseguridad y comunidad técnica universitaria.",
+    "categoryId": "cat-ciberseguridad", "requiredSkillIds": ["comp-ciberseguridad", "comp-diseno-grafico", "comp-gestion-agil"],
+    "estimatedMembers": 4, "visibility": "public", "tags": ["ctf", "competencia", "evento"],
+    "ownerId": "650000000000000000000004", "members": [],
+    "status": "published", "createdAt": "2026-09-21T15:00:00.000Z", "updatedAt": "2026-09-21T15:00:00.000Z" }
+]
+```
+
+### `servidor/src/seed/datos/requests.json`
+
+```json
+[
+  { "id": "670000000000000000000001", "initiativeId": "660000000000000000000002", "userId": "650000000000000000000003",
+    "message": "Puedo analizar los registros de tráfico y detectar patrones de saturación.", "offeredSkillId": "comp-analisis-datos",
+    "roleId": "rol-datos", "availability": "6 h/semana", "status": "accepted",
+    "decisionComment": "Bienvenido al equipo.", "decidedAt": "2026-09-11T15:00:00.000Z",
+    "createdAt": "2026-09-10T15:00:00.000Z", "updatedAt": "2026-09-11T15:00:00.000Z" },
+  { "id": "670000000000000000000002", "initiativeId": "660000000000000000000006", "userId": "650000000000000000000004",
+    "message": "Administro servidores del campus y puedo preparar las plantillas de despliegue.", "offeredSkillId": "comp-cloud",
+    "roleId": "rol-infraestructura", "availability": "4 h/semana", "status": "accepted",
+    "decisionComment": null, "decidedAt": "2026-09-13T15:00:00.000Z",
+    "createdAt": "2026-09-12T15:00:00.000Z", "updatedAt": "2026-09-13T15:00:00.000Z" },
+  { "id": "670000000000000000000003", "initiativeId": "660000000000000000000001", "userId": "650000000000000000000003",
+    "message": "Me gustaría coordinar los sprints y la asignación de mentores.", "offeredSkillId": "comp-gestion-agil",
+    "roleId": "rol-coordinacion", "availability": "3 h/semana", "status": "pending",
+    "decisionComment": null, "decidedAt": null,
+    "createdAt": "2026-09-16T15:00:00.000Z", "updatedAt": "2026-09-16T15:00:00.000Z" },
+  { "id": "670000000000000000000004", "initiativeId": "660000000000000000000002", "userId": "650000000000000000000001",
+    "message": "Puedo construir el tablero web con React.", "offeredSkillId": "comp-desarrollo-web",
+    "roleId": "rol-frontend", "availability": "5 h/semana", "status": "accepted",
+    "decisionComment": null, "decidedAt": "2026-09-11T15:00:00.000Z",
+    "createdAt": "2026-09-10T16:00:00.000Z", "updatedAt": "2026-09-11T15:00:00.000Z" },
+  { "id": "670000000000000000000005", "initiativeId": "660000000000000000000006", "userId": "650000000000000000000003",
+    "message": "Quisiera coordinar el uso del laboratorio entre los cursos.", "offeredSkillId": "comp-gestion-agil",
+    "roleId": "rol-coordinacion", "availability": "3 h/semana", "status": "rejected",
+    "decisionComment": "Por ahora ya cubrimos la coordinación.", "decidedAt": "2026-09-15T15:00:00.000Z",
+    "createdAt": "2026-09-14T15:00:00.000Z", "updatedAt": "2026-09-15T15:00:00.000Z" }
+]
+```
+
+### `servidor/src/seed/datos/projects.json`
+
+```json
+[
+  { "id": "680000000000000000000001", "initiativeId": "660000000000000000000002",
+    "name": "Monitoreo de la red de los laboratorios",
+    "objective": "Detectar caídas y saturación de la red de los laboratorios en menos de 5 minutos.",
+    "description": "Agentes ligeros en cada laboratorio, tablero web en tiempo real y alertas por correo cuando un enlace se satura o se cae.",
+    "technologies": ["Node.js", "Prometheus", "Grafana"],
+    "startDate": "2026-09-20", "estimatedEndDate": "2026-12-15",
+    "repositoryUrl": "https://github.com/twbs/bootstrap", "status": "in_progress",
+    "createdAt": "2026-09-20T15:00:00.000Z", "updatedAt": "2026-09-20T15:00:00.000Z" }
+]
 ```
 
 ---
 
-## Paso 3 · Validación a mano en lugar de zod (como `series.validacion.js` del lab)
+## Paso 2 · Reemplazar `pruebas/generar-coleccion.mjs`
 
-Cada validador es una función que revisa campo por campo con `if` y devuelve `{ errores, datos }`:
-- **`errores`**: un mensaje por campo, o `{}` si todo está bien, igual que `validarSerie`.
-- **`datos`**: los campos copiados uno por uno y limpios.
-
-**No cambian:**
-- los nombres de los archivos ni de las funciones, así que las rutas no se tocan;
-- los mensajes;
-- el contrato;
-- el cliente.
-
-**3.1 Reemplaza completos los 6 archivos de `servidor/src/validators/`.** `limites.js` **no cambia**. En cada
-archivo: `Ctrl+A` y pega el contenido.
-
-#### `servidor/src/validators/comunes.js`
+Cambian los correos, los ids de competencias y categorías, y los textos de los cuerpos de prueba. Los
+casos y lo que espera cada uno son los mismos 78 de antes. También cambian las claves internas: `ana` pasa
+a `leonardo` y `voluntariado` a `mentorias`. Por eso en Newman ahora ves "Login leonardo".
 
 ```js
-// validators/comunes.js
-// Revisiones que usan todos los validadores. Cada "revisar" devuelve el mensaje de error,
-// o null si el valor está bien (igual que en series.validacion.js del lab).
-
-import { LIMITES } from './limites.js';
-
-export const OBLIGATORIO = 'Este campo es obligatorio.';
-export const OPCION_INVALIDA = 'Elegí una opción válida.';
-export const REGEX_OBJECT_ID = /^[a-f\d]{24}$/i;
-
-export const falta = (valor) => valor === undefined || valor === null;
-export const limpiar = (valor) => (typeof valor === 'string' ? valor.trim() : valor);
-export const sinRepetidos = (lista) => new Set(lista).size === lista.length;
-
-// Texto obligatorio entre min y max caracteres (sin contar espacios al inicio y al final).
-export function revisarLargo(valor, min, max) {
-  if (falta(valor)) return OBLIGATORIO;
-  if (typeof valor !== 'string') return 'Debe ser texto.';
-  const largo = valor.trim().length;
-  if (largo < min) return `Debe tener al menos ${min} caracteres.`;
-  if (largo > max) return `No debe superar los ${max} caracteres.`;
-  return null;
-}
-
-// Campos con largo definido en limites.js: title, summary, message, name…
-export const revisarTexto = (valor, campo) => revisarLargo(valor, LIMITES[campo][0], LIMITES[campo][1]);
-
-// ── Query string (?page=2&type=idea…): todo llega como texto ──
-
-// page ≥ 1 (1 por defecto); size ≥ 1 (12 por defecto, tope 50). sort se revisa en el repositorio.
-export function revisarPaginacion(query, errores) {
-  const page = query.page === undefined ? 1 : Number(query.page);
-  const size = query.size === undefined ? 12 : Number(query.size);
-  if (!Number.isInteger(page)) errores.page = 'Debe ser un número entero.';
-  else if (page < 1) errores.page = 'Debe ser 1 o mayor.';
-  if (!Number.isInteger(size)) errores.size = 'Debe ser un número entero.';
-  else if (size < 1) errores.size = 'Debe ser 1 o mayor.';
-  const sort = typeof query.sort === 'string' ? query.sort : undefined;
-  return { page, size: Math.min(size, 50), sort };
-}
-
-// Filtro de texto opcional (?q=, ?skill=…). Devuelve el texto limpio o undefined.
-export function revisarFiltro(query, campo, max, errores) {
-  const valor = query[campo];
-  if (valor === undefined) return undefined;
-  if (typeof valor !== 'string' || valor.trim().length > max) {
-    errores[campo] = `Debe ser un texto de hasta ${max} caracteres.`;
-    return undefined;
-  }
-  return valor.trim();
-}
-
-// Filtro opcional con valores fijos (?type=idea, ?status=pending…).
-export function revisarFiltroOpcion(query, campo, opciones, errores) {
-  const valor = query[campo];
-  if (valor === undefined) return undefined;
-  if (!opciones.includes(valor)) {
-    errores[campo] = OPCION_INVALIDA;
-    return undefined;
-  }
-  return valor;
-}
-```
-
-#### `servidor/src/validators/auth.schemas.js`
-
-```js
-// validators/auth.schemas.js
-// Registro e inicio de sesión. Cada función devuelve { errores, datos }:
-// errores trae un mensaje por campo ({} si todo está bien) y datos solo los campos permitidos, limpios.
-
-import { TIPOS_MIEMBRO } from '../models/enums.js';
-import { OBLIGATORIO, OPCION_INVALIDA, falta, limpiar, revisarLargo } from './comunes.js';
-
-const REGEX_CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-// Nombre, apellidos y carrera: de 2 a 60 caracteres.
-export const revisarNombre = (valor) => revisarLargo(valor, 2, 60);
-
-function revisarCorreo(valor) {
-  if (falta(valor)) return OBLIGATORIO;
-  if (typeof valor !== 'string') return 'Debe ser texto.';
-  if (valor.trim().length > 120) return 'No debe superar los 120 caracteres.';
-  if (!REGEX_CORREO.test(valor.trim())) return 'Ingresá un correo válido.';
-  return null;
-}
-
-// El correo se guarda y se busca siempre en minúsculas.
-const limpiarCorreo = (valor) => (typeof valor === 'string' ? valor.trim().toLowerCase() : valor);
-
-function revisarClave(clave) {
-  if (falta(clave)) return OBLIGATORIO;
-  if (typeof clave !== 'string') return 'Debe ser texto.';
-  if (clave.length < 8) return 'Debe tener al menos 8 caracteres.';
-  if (clave.length > 72) return 'No debe superar los 72 caracteres.';
-  if (!/[A-Za-zÁÉÍÓÚáéíóúÑñ]/.test(clave)) return 'Debe incluir al menos una letra.';
-  if (!/\d/.test(clave)) return 'Debe incluir al menos un número.';
-  return null;
-}
-
-export function cuerpoRegistro(body) {
-  const errores = {};
-
-  for (const campo of ['firstName', 'lastName', 'career']) {
-    const mensaje = revisarNombre(body[campo]);
-    if (mensaje) errores[campo] = mensaje;
-  }
-  // El segundo apellido es opcional: si viene, cumple la misma regla que el primero.
-  if (!falta(body.secondLastName)) {
-    const mensaje = revisarNombre(body.secondLastName);
-    if (mensaje) errores.secondLastName = mensaje;
-  }
-
-  const mensajeCorreo = revisarCorreo(body.email);
-  if (mensajeCorreo) errores.email = mensajeCorreo;
-
-  const mensajeClave = revisarClave(body.password);
-  if (mensajeClave) errores.password = mensajeClave;
-  if (typeof body.confirmPassword !== 'string') errores.confirmPassword = OBLIGATORIO;
-  else if (!mensajeClave && body.confirmPassword !== body.password) errores.confirmPassword = 'Las contraseñas no coinciden.';
-
-  if (!TIPOS_MIEMBRO.includes(body.memberType)) errores.memberType = OPCION_INVALIDA;
-  if (body.acceptTerms !== true) errores.acceptTerms = 'Debés aceptar los términos de uso.';
-
-  // confirmPassword y acceptTerms solo se revisan: no se guardan.
-  const datos = {
-    firstName: limpiar(body.firstName),
-    lastName: limpiar(body.lastName),
-    secondLastName: limpiar(body.secondLastName) ?? null,
-    email: limpiarCorreo(body.email),
-    password: body.password,
-    memberType: body.memberType,
-    career: limpiar(body.career),
-  };
-  return { errores, datos };
-}
-
-export function cuerpoLogin(body) {
-  const errores = {};
-  const mensajeCorreo = revisarCorreo(body.email);
-  if (mensajeCorreo) errores.email = mensajeCorreo;
-  if (typeof body.password !== 'string' || body.password === '') errores.password = OBLIGATORIO;
-
-  return { errores, datos: { email: limpiarCorreo(body.email), password: body.password } };
-}
-```
-
-#### `servidor/src/validators/iniciativas.schemas.js`
-
-```js
-// validators/iniciativas.schemas.js
-// Cuerpo de POST y PUT /initiatives, y filtros de GET /initiatives.
-// Cada función devuelve { errores, datos }.
-
-import { TIPOS, VISIBILIDADES, ESTADOS_INICIATIVA } from '../models/enums.js';
-import { REGEX_ETIQUETA } from './limites.js';
-import {
-  OBLIGATORIO, OPCION_INVALIDA, REGEX_OBJECT_ID, falta, limpiar, sinRepetidos,
-  revisarTexto, revisarPaginacion, revisarFiltro, revisarFiltroOpcion,
-} from './comunes.js';
-
-const TEXTOS = ['title', 'summary', 'description', 'problem', 'beneficiaries'];
-
-export function cuerpoIniciativa(body) {
-  const errores = {};
-
-  for (const campo of TEXTOS) {
-    const mensaje = revisarTexto(body[campo], campo);
-    if (mensaje) errores[campo] = mensaje;
-  }
-
-  if (!TIPOS.includes(body.type)) errores.type = OPCION_INVALIDA;
-  if (!VISIBILIDADES.includes(body.visibility)) errores.visibility = OPCION_INVALIDA;
-  if (typeof body.categoryId !== 'string' || body.categoryId === '') errores.categoryId = 'Elegí una categoría.';
-
-  const competencias = body.requiredSkillIds;
-  if (!Array.isArray(competencias) || competencias.length === 0) errores.requiredSkillIds = 'Agregá al menos 1.';
-  else if (competencias.length > 8) errores.requiredSkillIds = 'Podés agregar como máximo 8.';
-  else if (!competencias.every((c) => typeof c === 'string')) errores.requiredSkillIds = OPCION_INVALIDA;
-  else if (!sinRepetidos(competencias)) errores.requiredSkillIds = 'No repitas competencias.';
-
-  const integrantes = body.estimatedMembers;
-  if (falta(integrantes)) errores.estimatedMembers = OBLIGATORIO;
-  else if (!Number.isInteger(integrantes)) errores.estimatedMembers = 'Debe ser un número entero.';
-  else if (integrantes < 1 || integrantes > 20) errores.estimatedMembers = 'Debe estar entre 1 y 20.';
-
-  // Las etiquetas son opcionales: si no vienen, la lista queda vacía.
-  const etiquetas = body.tags ?? [];
-  if (!Array.isArray(etiquetas)) errores.tags = 'Debe ser una lista.';
-  else if (etiquetas.length > 5) errores.tags = 'Podés agregar como máximo 5.';
-  else if (!etiquetas.every((e) => typeof e === 'string' && REGEX_ETIQUETA.test(e.trim()))) {
-    errores.tags = 'Usá letras, números, espacios o guiones (2 a 30 caracteres).';
-  } else if (!sinRepetidos(etiquetas.map((e) => e.trim()))) errores.tags = 'No repitas etiquetas.';
-
-  // Se copia campo por campo: ownerId, status o members del cliente nunca llegan al servicio.
-  const datos = {
-    title: limpiar(body.title),
-    type: body.type,
-    summary: limpiar(body.summary),
-    description: limpiar(body.description),
-    problem: limpiar(body.problem),
-    beneficiaries: limpiar(body.beneficiaries),
-    categoryId: body.categoryId,
-    requiredSkillIds: competencias,
-    estimatedMembers: integrantes,
-    visibility: body.visibility,
-    tags: Array.isArray(etiquetas) ? etiquetas.map(limpiar) : [],
-  };
-  return { errores, datos };
-}
-
-export function consultaIniciativas(query) {
-  const errores = {};
-  const datos = {
-    ...revisarPaginacion(query, errores),
-    q: revisarFiltro(query, 'q', 100, errores),
-    type: revisarFiltroOpcion(query, 'type', TIPOS, errores),
-    category: revisarFiltro(query, 'category', 40, errores),
-    skill: revisarFiltro(query, 'skill', 40, errores),
-    status: revisarFiltroOpcion(query, 'status', ESTADOS_INICIATIVA, errores),
-    hasSpots: revisarFiltroOpcion(query, 'hasSpots', ['true', 'false'], errores),
-    member: revisarFiltroOpcion(query, 'member', ['me'], errores),
-  };
-  // owner acepta "me" o el id de una persona.
-  if (query.owner !== undefined) {
-    if (query.owner === 'me' || (typeof query.owner === 'string' && REGEX_OBJECT_ID.test(query.owner))) datos.owner = query.owner;
-    else errores.owner = 'Identificador inválido.';
-  }
-  return { errores, datos };
-}
-```
-
-#### `servidor/src/validators/usuarios.schemas.js`
-
-```js
-// validators/usuarios.schemas.js
-// Edición del perfil propio (PUT /users/me) y búsqueda de personas (GET /users).
-// Cada función devuelve { errores, datos }.
-
-import { NIVELES } from '../models/enums.js';
-import { limpiar, sinRepetidos, revisarPaginacion, revisarFiltro, revisarFiltroOpcion } from './comunes.js';
-import { revisarNombre } from './auth.schemas.js';
-
-const REGEX_URL = /^https?:\/\/\S+$/;
-
-export function cuerpoPerfil(body) {
-  const errores = {};
-  const datos = {};
-
-  // Obligatorios
-  for (const campo of ['firstName', 'lastName', 'career']) {
-    const mensaje = revisarNombre(body[campo]);
-    if (mensaje) errores[campo] = mensaje;
-    datos[campo] = limpiar(body[campo]);
-  }
-
-  // Opcionales: solo se revisan y se guardan si vienen en el cuerpo.
-  if (body.secondLastName !== undefined) {
-    if (body.secondLastName !== null) {
-      const mensaje = revisarNombre(body.secondLastName);
-      if (mensaje) errores.secondLastName = mensaje;
-    }
-    datos.secondLastName = limpiar(body.secondLastName);
-  }
-
-  if (body.bio !== undefined) {
-    if (typeof body.bio !== 'string') errores.bio = 'Debe ser texto.';
-    else if (body.bio.trim().length > 500) errores.bio = 'No debe superar los 500 caracteres.';
-    datos.bio = limpiar(body.bio);
-  }
-
-  if (body.skills !== undefined) {
-    const lista = body.skills;
-    if (!Array.isArray(lista)) errores.skills = 'Debe ser una lista.';
-    else if (lista.length > 15) errores.skills = 'Podés registrar como máximo 15.';
-    else if (!lista.every((s) => typeof s?.skillId === 'string' && s.skillId !== '' && NIVELES.includes(s.level))) {
-      errores.skills = 'Cada competencia necesita un nivel válido.';
-    } else if (!sinRepetidos(lista.map((s) => s.skillId))) errores.skills = 'No repitas competencias.';
-    else datos.skills = lista.map((s) => ({ skillId: s.skillId, level: s.level }));
-  }
-
-  if (body.interests !== undefined) {
-    const lista = body.interests;
-    if (!Array.isArray(lista)) errores.interests = 'Debe ser una lista.';
-    else if (lista.length > 10) errores.interests = 'Podés agregar como máximo 10.';
-    else if (!lista.every((i) => typeof i === 'string' && i.trim().length >= 2)) errores.interests = 'Cada interés necesita al menos 2 caracteres.';
-    else if (!lista.every((i) => i.trim().length <= 30)) errores.interests = 'Cada interés admite hasta 30 caracteres.';
-    else datos.interests = lista.map(limpiar);
-  }
-
-  if (body.availability !== undefined) {
-    const horas = body.availability?.hoursPerWeek;
-    const detalle = body.availability?.detail ?? '';
-    if (!Number.isInteger(horas)) errores['availability.hoursPerWeek'] = 'Debe ser un número entero.';
-    else if (horas < 0 || horas > 40) errores['availability.hoursPerWeek'] = 'Entre 0 y 40.';
-    if (typeof detalle !== 'string' || detalle.trim().length > 100) errores['availability.detail'] = 'No debe superar los 100 caracteres.';
-    datos.availability = { hoursPerWeek: horas, detail: limpiar(detalle) };
-  }
-
-  if (body.portfolioUrl !== undefined) {
-    const url = limpiar(body.portfolioUrl);
-    if (url !== null && (typeof url !== 'string' || url.length > 200 || !REGEX_URL.test(url))) {
-      errores.portfolioUrl = 'Ingresá una URL que empiece con http:// o https://.';
-    }
-    datos.portfolioUrl = url;
-  }
-
-  // El correo se acepta solo para que el servicio lo rechace con un mensaje claro si cambia.
-  if (typeof body.email === 'string') datos.email = body.email;
-
-  return { errores, datos };
-}
-
-export function consultaUsuarios(query) {
-  const errores = {};
-  const datos = {
-    ...revisarPaginacion(query, errores),
-    q: revisarFiltro(query, 'q', 60, errores),
-    skill: revisarFiltro(query, 'skill', 40, errores),
-    career: revisarFiltro(query, 'career', 60, errores),
-    available: revisarFiltroOpcion(query, 'available', ['true', 'false'], errores),
-  };
-  return { errores, datos };
-}
-```
-
-#### `servidor/src/validators/solicitudes.schemas.js`
-
-```js
-// validators/solicitudes.schemas.js
-// Cuerpo de una solicitud, la decisión del propietario y los filtros de los dos listados.
-// Cada función devuelve { errores, datos }.
-
-import { ESTADOS_SOLICITUD } from '../models/enums.js';
-import { REGEX_DISPONIBILIDAD, REGEX_FECHA } from './limites.js';
-import { OBLIGATORIO, REGEX_OBJECT_ID, falta, limpiar, revisarTexto, revisarPaginacion, revisarFiltro, revisarFiltroOpcion } from './comunes.js';
-
-export function cuerpoSolicitud(body) {
-  const errores = {};
-
-  const mensaje = revisarTexto(body.message, 'message');
-  if (mensaje) errores.message = mensaje;
-  if (typeof body.offeredSkillId !== 'string' || body.offeredSkillId === '') errores.offeredSkillId = 'Elegí una competencia.';
-  if (typeof body.roleId !== 'string' || body.roleId === '') errores.roleId = 'Elegí un rol.';
-
-  if (falta(body.availability)) errores.availability = OBLIGATORIO;
-  else if (typeof body.availability !== 'string' || !REGEX_DISPONIBILIDAD.test(body.availability.trim())) {
-    errores.availability = 'Usá el formato "N h/semana", por ejemplo 4 h/semana.';
-  }
-
-  const datos = {
-    message: limpiar(body.message),
-    offeredSkillId: body.offeredSkillId,
-    roleId: body.roleId,
-    availability: limpiar(body.availability),
-  };
-  return { errores, datos };
-}
-
-export function cuerpoDecision(body) {
-  const errores = {};
-  if (!['accepted', 'rejected'].includes(body.decision)) errores.decision = 'La decisión debe ser accepted o rejected.';
-
-  const datos = { decision: body.decision };
-  if (body.comment !== undefined) {
-    if (typeof body.comment !== 'string' || body.comment.trim().length > 300) errores.comment = 'No debe superar los 300 caracteres.';
-    datos.comment = limpiar(body.comment);
-  }
-  return { errores, datos };
-}
-
-export function consultaMias(query) {
-  const errores = {};
-  const datos = {
-    ...revisarPaginacion(query, errores),
-    status: revisarFiltroOpcion(query, 'status', ESTADOS_SOLICITUD, errores),
-  };
-  return { errores, datos };
-}
-
-// Fecha opcional en formato AAAA-MM-DD.
-function revisarFecha(query, campo, errores) {
-  const valor = query[campo];
-  if (valor === undefined) return undefined;
-  if (typeof valor !== 'string' || !REGEX_FECHA.test(valor)) {
-    errores[campo] = 'Usá el formato AAAA-MM-DD.';
-    return undefined;
-  }
-  return valor;
-}
-
-export function consultaRecibidas(query) {
-  const errores = {};
-  const datos = {
-    ...revisarPaginacion(query, errores),
-    status: revisarFiltroOpcion(query, 'status', ESTADOS_SOLICITUD, errores),
-    skill: revisarFiltro(query, 'skill', 40, errores),
-    role: revisarFiltro(query, 'role', 40, errores),
-    from: revisarFecha(query, 'from', errores),
-    to: revisarFecha(query, 'to', errores),
-  };
-  if (query.initiativeId !== undefined) {
-    if (typeof query.initiativeId === 'string' && REGEX_OBJECT_ID.test(query.initiativeId)) datos.initiativeId = query.initiativeId;
-    else errores.initiativeId = 'Identificador inválido.';
-  }
-  // Regla entre campos: solo si las dos fechas son válidas.
-  if (datos.from && datos.to && datos.from > datos.to) errores.from = 'La fecha inicial no puede ser posterior a la final.';
-  return { errores, datos };
-}
-```
-
-#### `servidor/src/validators/proyectos.schemas.js`
-
-```js
-// validators/proyectos.schemas.js
-// Cuerpo para convertir una iniciativa en proyecto y filtros de GET /projects.
-// Cada función devuelve { errores, datos }.
-
-import { ESTADOS_PROYECTO } from '../models/enums.js';
-import { REGEX_FECHA, REGEX_GITHUB } from './limites.js';
-import { OBLIGATORIO, falta, limpiar, sinRepetidos, revisarTexto, revisarPaginacion, revisarFiltroOpcion } from './comunes.js';
-
-export function cuerpoProyecto(body) {
-  const errores = {};
-
-  for (const campo of ['name', 'objective', 'description']) {
-    const mensaje = revisarTexto(body[campo], campo);
-    if (mensaje) errores[campo] = mensaje;
-  }
-
-  // Tecnologías: opcionales, hasta 10, sin repetir.
-  const tecnologias = body.technologies ?? [];
-  if (!Array.isArray(tecnologias)) errores.technologies = 'Debe ser una lista.';
-  else if (tecnologias.length > 10) errores.technologies = 'Podés agregar como máximo 10.';
-  else if (!tecnologias.every((t) => typeof t === 'string' && t.trim().length >= 1 && t.trim().length <= 40)) {
-    errores.technologies = 'Cada tecnología admite hasta 40 caracteres.';
-  } else if (!sinRepetidos(tecnologias.map((t) => t.trim()))) errores.technologies = 'No repitas tecnologías.';
-
-  if (falta(body.startDate)) errores.startDate = OBLIGATORIO;
-  else if (typeof body.startDate !== 'string' || !REGEX_FECHA.test(body.startDate)) errores.startDate = 'Usá el formato AAAA-MM-DD.';
-
-  const fin = body.estimatedEndDate ?? null;
-  if (fin !== null && (typeof fin !== 'string' || !REGEX_FECHA.test(fin))) errores.estimatedEndDate = 'Usá el formato AAAA-MM-DD.';
-  // Regla entre campos: solo si las dos fechas son válidas.
-  else if (fin !== null && !errores.startDate && fin < body.startDate) errores.estimatedEndDate = 'Debe ser igual o posterior a la fecha de inicio.';
-
-  const repositorio = limpiar(body.repositoryUrl) ?? null;
-  if (repositorio !== null && (typeof repositorio !== 'string' || !REGEX_GITHUB.test(repositorio))) {
-    errores.repositoryUrl = 'Usá el formato https://github.com/usuario/repositorio.';
-  }
-
-  const datos = {
-    name: limpiar(body.name),
-    objective: limpiar(body.objective),
-    description: limpiar(body.description),
-    technologies: Array.isArray(tecnologias) ? tecnologias.map(limpiar) : [],
-    startDate: body.startDate,
-    estimatedEndDate: fin,
-    repositoryUrl: repositorio,
-  };
-  return { errores, datos };
-}
-
-export function consultaProyectos(query) {
-  const errores = {};
-  const datos = {
-    ...revisarPaginacion(query, errores),
-    status: revisarFiltroOpcion(query, 'status', ESTADOS_PROYECTO, errores),
-  };
-  return { errores, datos };
-}
-```
-
-**3.2 Reemplaza completo `servidor/src/middleware/validar.js`:**
-
-```js
-// middleware/validar.js
-// Corre la función de validación de cada parte de la petición (query o body).
-// Si alguna devolvió errores, responde 400 con un mensaje por campo; si no, deja los datos limpios
-// en req.validado para el controlador.
-
-import { ErrorApi } from '../utils/ErrorApi.js';
-
-export const validar = (validadores) => (req, _res, next) => {
-  req.validado = {};
-  const errores = {};
-
-  for (const parte of ['query', 'body']) {
-    if (!validadores[parte]) continue;
-    const resultado = validadores[parte](req[parte] ?? {});
-    req.validado[parte] = resultado.datos;
-    Object.assign(errores, resultado.errores);
-  }
-
-  if (Object.keys(errores).length > 0) {
-    // De { title: 'Debe tener…' } al formato del contrato: [{ field: 'title', message: 'Debe tener…' }]
-    const details = Object.entries(errores).map(([field, message]) => ({ field, message }));
-    throw ErrorApi.validacion(details);
-  }
-  next();
+// Genera innovation-hub.postman_collection.json y innovation-hub.postman_environment.json.
+// Uso: node pruebas/generar-coleccion.mjs
+import { writeFileSync } from 'node:fs';
+
+const ID = {
+  leonardo: '650000000000000000000001', donatello: '650000000000000000000002', rafael: '650000000000000000000003', miguel: '650000000000000000000004',
+  mentorias: '660000000000000000000001', monitoreo: '660000000000000000000002', certificaciones: '660000000000000000000003',
+  galeria: '660000000000000000000004', mesaAyuda: '660000000000000000000005', nube: '660000000000000000000006',
+  contrasenas: '660000000000000000000007', ctf: '660000000000000000000008',
+  solicitudMentorias: '670000000000000000000003', proyectoMonitoreo: '680000000000000000000001',
+  inexistente: '6a0000000000000000000099',
 };
+const CONTRASENA_PRUEBA = 'Prueba123!';
+const CORREOS = { leonardo: 'leonardo.brenes@ucenfotec.ac.cr', donatello: 'donatello.quiros@ucenfotec.ac.cr', rafael: 'rafael.montero@ucenfotec.ac.cr', miguel: 'miguel.solano@ucenfotec.ac.cr' };
+
+function cabeceras(quien) {
+  const lista = [{ key: 'Content-Type', value: 'application/json' }];
+  if (!quien) return lista;
+  lista.push({ key: 'Authorization', value: `Bearer {{token_${quien}}}` });
+  return lista;
+}
+
+function caso(nombre, metodo, ruta, { quien = null, cuerpo, estado, codigo, extra = [] } = {}) {
+  const pruebas = [`pm.test('Responde ${estado}', () => pm.response.to.have.status(${estado}));`];
+  if (codigo) pruebas.push(`pm.test('Código de error ${codigo}', () => pm.expect(pm.response.json().error.code).to.eql('${codigo}'));`);
+  pruebas.push(...extra);
+  return {
+    name: nombre,
+    event: [{ listen: 'test', script: { type: 'text/javascript', exec: pruebas } }],
+    request: {
+      method: metodo,
+      header: cabeceras(quien),
+      url: `{{baseUrl}}${ruta}`,
+      ...(cuerpo !== undefined && { body: { mode: 'raw', raw: typeof cuerpo === 'string' ? cuerpo : JSON.stringify(cuerpo, null, 2) } }),
+    },
+  };
+}
+
+const guardar = (variable, expresion = 'pm.response.json().id') => `pm.collectionVariables.set('${variable}', ${expresion});`;
+const carpeta = (name, item) => ({ name, item });
+
+const iniciativaNueva = {
+  title: 'Comunidad de práctica de hacking ético', type: 'idea',
+  summary: 'Sesiones semanales para practicar retos de seguridad en equipo.',
+  description: 'Proponemos un espacio semanal con máquinas vulnerables controladas, guías y revisión de soluciones entre pares.',
+  problem: 'Los estudiantes practican seguridad solos y sin retroalimentación.', beneficiaries: 'Estudiantes de Ciberseguridad.',
+  categoryId: 'cat-ciberseguridad', requiredSkillIds: ['comp-gestion-agil'], estimatedMembers: 4, visibility: 'public', tags: ['hacking ético', 'comunidad'],
+};
+const solicitudRafael = { message: 'Puedo coordinar los turnos y las plantillas del laboratorio.', offeredSkillId: 'comp-gestion-agil', roleId: 'rol-coordinacion', availability: '3 h/semana' };
+const proyecto = {
+  name: 'Plataforma de mentorías', objective: 'Emparejar mentores y estudiantes por tecnología.',
+  description: 'Aplicación web para publicar horarios de mentoría, reservar sesiones y registrar el avance.',
+  technologies: ['React', 'Express'], startDate: '2026-11-10', estimatedEndDate: '2027-03-01', repositoryUrl: null,
+};
+
+const carpetas = [];
+
+carpetas.push(carpeta('00 Preparación', Object.keys(CORREOS).map((quien) => caso(`Login ${quien}`, 'POST', '/auth/login', {
+  cuerpo: { email: CORREOS[quien], password: CONTRASENA_PRUEBA }, estado: 200,
+  extra: [guardar(`token_${quien}`, 'pm.response.json().token')],
+}))));
+
+carpetas.push(carpeta('01 Autenticación', [
+  caso('Registro correcto', 'POST', '/auth/register', {
+    cuerpo: { firstName: 'Sofía', lastName: 'Quesada', email: 'sofia.quesada@ucenfotec.ac.cr', password: 'Clave2026x', confirmPassword: 'Clave2026x', memberType: 'student', career: 'Diseño', acceptTerms: true },
+    estado: 201, extra: ["pm.test('No devuelve contraseña', () => pm.expect(pm.response.json()).to.not.have.any.keys('password', 'passwordHash'));"],
+  }),
+  caso('Registro con datos inválidos', 'POST', '/auth/register', { cuerpo: { firstName: 'S', email: 'no-es-correo', password: '123', confirmPassword: '456', acceptTerms: false }, estado: 400, codigo: 'VALIDATION_ERROR' }),
+  caso('Registro con correo existente', 'POST', '/auth/register', {
+    cuerpo: { firstName: 'Otra', lastName: 'Persona', email: CORREOS.leonardo, password: 'Clave2026x', confirmPassword: 'Clave2026x', memberType: 'student', career: 'Diseño', acceptTerms: true },
+    estado: 409, codigo: 'EMAIL_TAKEN',
+  }),
+  caso('Login con contraseña incorrecta', 'POST', '/auth/login', { cuerpo: { email: CORREOS.leonardo, password: 'incorrecta1' }, estado: 401, codigo: 'INVALID_CREDENTIALS' }),
+  caso('Login de la cuenta nueva', 'POST', '/auth/login', { cuerpo: { email: 'sofia.quesada@ucenfotec.ac.cr', password: 'Clave2026x' }, estado: 200, extra: [guardar('token_sofia', 'pm.response.json().token')] }),
+  caso('Perfil propio', 'GET', '/auth/me', { quien: 'sofia', estado: 200 }),
+  caso('Perfil propio sin token', 'GET', '/auth/me', { estado: 401, codigo: 'UNAUTHORIZED' }),
+  caso('Logout', 'POST', '/auth/logout', { quien: 'sofia', estado: 204 }),
+  caso('Token revocado tras logout', 'GET', '/auth/me', { quien: 'sofia', estado: 401, codigo: 'UNAUTHORIZED' }),
+]));
+
+carpetas.push(carpeta('02 Usuarios', [
+  caso('Buscar por competencia y disponibilidad', 'GET', '/users?skill=comp-gestion&available=true', { quien: 'leonardo', estado: 200 }),
+  caso('Buscar con tamaño inválido', 'GET', '/users?size=abc', { quien: 'leonardo', estado: 400, codigo: 'VALIDATION_ERROR' }),
+  caso('Perfil inexistente', 'GET', `/users/${ID.inexistente}`, { quien: 'leonardo', estado: 404, codigo: 'NOT_FOUND' }),
+  caso('Buscar sin token', 'GET', '/users', { estado: 401, codigo: 'UNAUTHORIZED' }),
+  caso('Modificar perfil', 'PUT', '/users/me', {
+    quien: 'miguel', estado: 200,
+    cuerpo: { firstName: 'Miguel', lastName: 'Solano', secondLastName: null, career: 'Tecnologías de Información', bio: 'Administro la infraestructura en la nube del campus.', skills: [{ skillId: 'comp-cloud', level: 'advanced' }], interests: ['infraestructura'], availability: { hoursPerWeek: 2, detail: 'viernes' }, portfolioUrl: null },
+  }),
+  caso('Modificar el correo desde el perfil', 'PUT', '/users/me', {
+    quien: 'miguel', estado: 400, codigo: 'VALIDATION_ERROR',
+    cuerpo: { firstName: 'Miguel', lastName: 'Solano', career: 'Tecnologías de Información', email: 'otro@ucenfotec.ac.cr' },
+  }),
+]));
+
+carpetas.push(carpeta('03 Catálogos', [
+  caso('Categorías', 'GET', '/categories', { estado: 200, extra: ["pm.test('Ocho categorías', () => pm.expect(pm.response.json()).to.have.length(8));"] }),
+  caso('Competencias', 'GET', '/skills', { estado: 200 }),
+  caso('Roles', 'GET', '/roles', { estado: 200 }),
+  caso('Ruta inexistente', 'GET', '/no-existe', { estado: 404, codigo: 'NOT_FOUND' }),
+]));
+
+carpetas.push(carpeta('04 Iniciativas', [
+  caso('Listar con filtros combinados', 'GET', '/initiatives?type=challenge&category=cat-ciberseguridad&sort=title', {
+    estado: 200, extra: ["pm.test('Sobre de paginación', () => pm.expect(pm.response.json()).to.have.all.keys('items', 'page', 'size', 'totalItems', 'totalPages'));"],
+  }),
+  caso('Tamaño de página limitado a 50', 'GET', '/initiatives?size=1000', { estado: 200, extra: ["pm.test('size = 50', () => pm.expect(pm.response.json().size).to.eql(50));"] }),
+  caso('Listar con tipo inválido', 'GET', '/initiatives?type=cualquiera', { estado: 400, codigo: 'VALIDATION_ERROR' }),
+  caso('Mis iniciativas sin token', 'GET', '/initiatives?owner=me', { estado: 401, codigo: 'UNAUTHORIZED' }),
+  caso('Restringida vista por un tercero', 'GET', `/initiatives/${ID.mesaAyuda}`, {
+    quien: 'leonardo', estado: 200,
+    extra: ["pm.test('Solo el resumen', () => pm.expect(Object.keys(pm.response.json()).sort()).to.eql(['accessLevel','category','id','requiredSkills','summary','title','type','visibility']));"],
+  }),
+  caso('Privada vista por un tercero', 'GET', `/initiatives/${ID.contrasenas}`, { quien: 'miguel', estado: 404, codigo: 'NOT_FOUND' }),
+  caso('Institucional sin sesión', 'GET', `/initiatives/${ID.certificaciones}`, { estado: 401, codigo: 'UNAUTHORIZED' }),
+  caso('Detalle inexistente', 'GET', `/initiatives/${ID.inexistente}`, { estado: 404, codigo: 'NOT_FOUND' }),
+  caso('Crear', 'POST', '/initiatives', { quien: 'leonardo', cuerpo: iniciativaNueva, estado: 201, extra: [guardar('nuevaIniciativa'), "pm.test('Location', () => pm.response.to.have.header('Location'));"] }),
+  caso('Crear con datos inválidos', 'POST', '/initiatives', { quien: 'leonardo', cuerpo: { ...iniciativaNueva, title: 'abc', estimatedMembers: 50, visibility: 'secreta' }, estado: 400, codigo: 'VALIDATION_ERROR' }),
+  caso('Crear sin sesión', 'POST', '/initiatives', { cuerpo: iniciativaNueva, estado: 401, codigo: 'UNAUTHORIZED' }),
+  caso('Modificar', 'PUT', '/initiatives/{{nuevaIniciativa}}', { quien: 'leonardo', cuerpo: { ...iniciativaNueva, estimatedMembers: 5 }, estado: 200 }),
+  caso('Modificar iniciativa ajena', 'PUT', '/initiatives/{{nuevaIniciativa}}', { quien: 'donatello', cuerpo: iniciativaNueva, estado: 403, codigo: 'FORBIDDEN' }),
+  caso('Modificar inexistente', 'PUT', `/initiatives/${ID.inexistente}`, { quien: 'leonardo', cuerpo: iniciativaNueva, estado: 404, codigo: 'NOT_FOUND' }),
+  caso('Integrantes menores que el equipo', 'PUT', `/initiatives/${ID.mentorias}`, {
+    quien: 'leonardo', estado: 409, codigo: 'PARTICIPANTS_BELOW_TEAM',
+    cuerpo: { ...iniciativaNueva, title: 'Plataforma de mentorías de programación', estimatedMembers: 1 },
+  }),
+  caso('Eliminar con información relacionada', 'DELETE', `/initiatives/${ID.mentorias}`, { quien: 'leonardo', estado: 409, codigo: 'HAS_RELATED_DATA' }),
+  caso('Eliminar iniciativa ajena', 'DELETE', '/initiatives/{{nuevaIniciativa}}', { quien: 'donatello', estado: 403, codigo: 'FORBIDDEN' }),
+  caso('Archivar', 'POST', '/initiatives/{{nuevaIniciativa}}/archive', { quien: 'leonardo', estado: 200, extra: ["pm.test('Archivada', () => pm.expect(pm.response.json().status).to.eql('archived'));"] }),
+  caso('Modificar archivada', 'PUT', '/initiatives/{{nuevaIniciativa}}', { quien: 'leonardo', cuerpo: iniciativaNueva, estado: 409, codigo: 'ARCHIVED' }),
+  caso('Eliminar sin relaciones', 'DELETE', '/initiatives/{{nuevaIniciativa}}', { quien: 'leonardo', estado: 204 }),
+  caso('Eliminar inexistente', 'DELETE', `/initiatives/${ID.inexistente}`, { quien: 'leonardo', estado: 404, codigo: 'NOT_FOUND' }),
+]));
+
+carpetas.push(carpeta('05 Equipo', [
+  caso('Listar miembros', 'GET', `/initiatives/${ID.mentorias}/members`, { quien: 'leonardo', estado: 200 }),
+  caso('Miembros de una restringida ajena', 'GET', `/initiatives/${ID.mesaAyuda}/members`, { quien: 'leonardo', estado: 403, codigo: 'FORBIDDEN' }),
+  caso('Retirar al propietario', 'DELETE', `/initiatives/${ID.mentorias}/members/${ID.leonardo}`, { quien: 'leonardo', estado: 409, codigo: 'CANNOT_REMOVE_OWNER' }),
+  caso('Retirar sin ser propietario', 'DELETE', `/initiatives/${ID.nube}/members/${ID.miguel}`, { quien: 'leonardo', estado: 403, codigo: 'FORBIDDEN' }),
+  caso('Retirar a quien no es miembro', 'DELETE', `/initiatives/${ID.mentorias}/members/${ID.miguel}`, { quien: 'leonardo', estado: 404, codigo: 'NOT_FOUND' }),
+  caso('Retirar miembro', 'DELETE', `/initiatives/${ID.nube}/members/${ID.miguel}`, { quien: 'donatello', estado: 204 }),
+]));
+
+carpetas.push(carpeta('06 Solicitudes', [
+  caso('Crear solicitud', 'POST', `/initiatives/${ID.nube}/requests`, { quien: 'rafael', cuerpo: solicitudRafael, estado: 201, extra: [guardar('nuevaSolicitud')] }),
+  caso('Solicitud duplicada pendiente', 'POST', `/initiatives/${ID.nube}/requests`, { quien: 'rafael', cuerpo: solicitudRafael, estado: 409, codigo: 'DUPLICATE_PENDING' }),
+  caso('Competencia que no tiene', 'POST', `/initiatives/${ID.ctf}/requests`, { quien: 'donatello', cuerpo: { ...solicitudRafael, offeredSkillId: 'comp-redes' }, estado: 400, codigo: 'VALIDATION_ERROR' }),
+  caso('Solicitar en la propia', 'POST', `/initiatives/${ID.mentorias}/requests`, { quien: 'leonardo', cuerpo: solicitudRafael, estado: 409, codigo: 'SELF_REQUEST' }),
+  caso('Solicitar en un proyecto', 'POST', `/initiatives/${ID.monitoreo}/requests`, { quien: 'miguel', cuerpo: solicitudRafael, estado: 409, codigo: 'INITIATIVE_CLOSED' }),
+  caso('Solicitar en inexistente', 'POST', `/initiatives/${ID.inexistente}/requests`, { quien: 'rafael', cuerpo: solicitudRafael, estado: 404, codigo: 'NOT_FOUND' }),
+  caso('Solicitar sin sesión', 'POST', `/initiatives/${ID.nube}/requests`, { cuerpo: solicitudRafael, estado: 401, codigo: 'UNAUTHORIZED' }),
+  caso('Mis solicitudes', 'GET', '/requests/mine?status=pending', { quien: 'rafael', estado: 200 }),
+  caso('Recibidas con filtros', 'GET', `/requests/received?initiativeId=${ID.nube}&status=pending`, { quien: 'donatello', estado: 200 }),
+  caso('Recibidas con fechas invertidas', 'GET', '/requests/received?from=2026-12-01&to=2026-01-01', { quien: 'donatello', estado: 400, codigo: 'VALIDATION_ERROR' }),
+  caso('Ver solicitud ajena', 'GET', '/requests/{{nuevaSolicitud}}', { quien: 'leonardo', estado: 403, codigo: 'FORBIDDEN' }),
+  caso('Modificar pendiente', 'PUT', '/requests/{{nuevaSolicitud}}', { quien: 'rafael', cuerpo: { ...solicitudRafael, availability: '4 h/semana' }, estado: 200 }),
+  caso('Resolver sin ser propietario', 'POST', '/requests/{{nuevaSolicitud}}/decision', { quien: 'rafael', cuerpo: { decision: 'accepted' }, estado: 403, codigo: 'FORBIDDEN' }),
+  caso('Decisión inválida', 'POST', '/requests/{{nuevaSolicitud}}/decision', { quien: 'donatello', cuerpo: { decision: 'tal vez' }, estado: 400, codigo: 'VALIDATION_ERROR' }),
+  caso('Aceptar e incorporar', 'POST', '/requests/{{nuevaSolicitud}}/decision', { quien: 'donatello', cuerpo: { decision: 'accepted', comment: 'Bienvenida' }, estado: 200 }),
+  caso('Resolver de nuevo', 'POST', '/requests/{{nuevaSolicitud}}/decision', { quien: 'donatello', cuerpo: { decision: 'rejected' }, estado: 409, codigo: 'NOT_PENDING' }),
+  caso('Cancelar ya resuelta', 'POST', '/requests/{{nuevaSolicitud}}/cancel', { quien: 'rafael', estado: 409, codigo: 'NOT_PENDING' }),
+  caso('Cancelar pendiente', 'POST', `/requests/${ID.solicitudMentorias}/cancel`, { quien: 'rafael', estado: 200 }),
+  caso('Cancelar inexistente', 'POST', `/requests/${ID.inexistente}/cancel`, { quien: 'rafael', estado: 404, codigo: 'NOT_FOUND' }),
+]));
+
+carpetas.push(carpeta('07 Proyectos', [
+  caso('Convertir con datos inválidos', 'POST', `/initiatives/${ID.mentorias}/project`, { quien: 'leonardo', cuerpo: { ...proyecto, name: '', estimatedEndDate: '2026-01-01' }, estado: 400, codigo: 'VALIDATION_ERROR' }),
+  caso('Convertir sin ser propietario', 'POST', `/initiatives/${ID.mentorias}/project`, { quien: 'donatello', cuerpo: proyecto, estado: 403, codigo: 'FORBIDDEN' }),
+  caso('Convertir sin integrantes', 'POST', `/initiatives/${ID.ctf}/project`, { quien: 'miguel', cuerpo: proyecto, estado: 409, codigo: 'NO_MEMBERS' }),
+  caso('Convertir', 'POST', `/initiatives/${ID.mentorias}/project`, { quien: 'leonardo', cuerpo: proyecto, estado: 201, extra: [guardar('nuevoProyecto')] }),
+  caso('Convertir de nuevo', 'POST', `/initiatives/${ID.mentorias}/project`, { quien: 'leonardo', cuerpo: proyecto, estado: 409, codigo: 'ALREADY_PROJECT' }),
+  caso('Listar proyectos', 'GET', '/projects?sort=name', { quien: 'donatello', estado: 200 }),
+  caso('Detalle de proyecto', 'GET', '/projects/{{nuevoProyecto}}', { quien: 'donatello', estado: 200, extra: ["pm.test('Conserva la iniciativa de origen', () => pm.expect(pm.response.json().initiative.id).to.eql('660000000000000000000001'));"] }),
+  caso('Proyecto inexistente', 'GET', `/projects/${ID.inexistente}`, { quien: 'donatello', estado: 404, codigo: 'NOT_FOUND' }),
+  caso('Proyectos sin sesión', 'GET', '/projects', { estado: 401, codigo: 'UNAUTHORIZED' }),
+]));
+
+const coleccion = {
+  info: {
+    name: 'Innovation Hub API',
+    description: 'Casos correctos, inválidos, inexistentes y no autorizados por recurso. Ejecutar después de npm run seed.',
+    schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
+  },
+  event: [{
+    listen: 'test',
+    script: { type: 'text/javascript', exec: [
+      "pm.test('Sin datos sensibles en la respuesta', () => {",
+      "  const texto = pm.response.text();",
+      "  // '\"password\":' detecta un valor filtrado; '\"field\":\"password\"' en un error de validación es legítimo.",
+      "  ['passwordHash', '\"password\":', 'mongodb://', 'stack'].forEach((s) => pm.expect(texto).to.not.include(s));",
+      '});',
+      "if (pm.response.code >= 400) pm.test('Formato de error uniforme', () => pm.expect(pm.response.json().error).to.have.all.keys('code', 'message', 'details'));",
+    ] },
+  }],
+  variable: [{ key: 'nuevaIniciativa', value: '' }, { key: 'nuevaSolicitud', value: '' }, { key: 'nuevoProyecto', value: '' }],
+  item: carpetas,
+};
+
+const entorno = { name: 'Innovation Hub local', values: [{ key: 'baseUrl', value: 'http://localhost:3000/api', enabled: true }] };
+
+const destino = new URL('.', import.meta.url);
+writeFileSync(new URL('innovation-hub.postman_collection.json', destino), JSON.stringify(coleccion, null, 2));
+writeFileSync(new URL('innovation-hub.postman_environment.json', destino), JSON.stringify(entorno, null, 2));
+console.log(`Colección generada: ${carpetas.reduce((n, c) => n + c.item.length, 0)} peticiones en ${carpetas.length} carpetas.`);
 ```
 
-**3.3 `servidor/src/middleware/manejadorErrores.js`**
-
-- Borra la línea 2: `import { ZodError } from 'zod';`
-- En `manejadorErrores`, borra la primera rama. **Antes:**
-
-  ```js
-    if (err instanceof ZodError) {
-      error = ErrorApi.validacion(err.issues.map((i) => ({ field: i.path.join('.'), message: i.message })));
-    } else if (err?.type === 'entity.parse.failed') {
-  ```
-
-  **Después:**
-
-  ```js
-    if (err?.type === 'entity.parse.failed') {
-  ```
-
-**3.4 Desinstalar zod y comprobar**
+Luego regenera la colección:
 
 ```powershell
-cd servidor
-npm uninstall zod
-cd ..
-git grep -n "zod" -- servidor/src servidor/package.json     # no debe mostrar nada
-```
-
-**3.5 Probar.**
-- Corre la prueba de siempre: tiene que dar 78 / 0.
-- En el navegador (con el cliente en `npm run dev`):
-  - editar el perfil y guardar;
-  - publicar una iniciativa válida;
-  - en "Convertir en proyecto", poner la fecha de fin antes que la de inicio. Aparece el error bajo el campo.
-
-**3.6 Commit**
-
-```powershell
-git add servidor\src\validators servidor\src\middleware\validar.js servidor\src\middleware\manejadorErrores.js servidor\package.json servidor\package-lock.json
-git commit -m "Validar la entrada a mano en lugar de usar zod" --trailer "Seccion: Servidor" --trailer "Cambio: Validadores con funciones que devuelven errores por campo y datos copiados campo por campo, como en las prácticas"
+node pruebas\generar-coleccion.mjs     # "Colección generada: 78 peticiones en 8 carpetas."
 ```
 
 ---
 
-## Paso 4 · Detalles de estilo
+## Paso 3 · Dos textos en el código
 
-| Archivo | Cambio |
-|---|---|
-| `servidor/src/services/reglas.js`, línea 1 | Reemplaza `// Reglas de negocio puras. Luego se mueven a BD` por `// Reglas de negocio puras: no consultan la base ni dependen de Express.` |
-| `cliente/src/App.jsx`, líneas 40 y 41 | Agrega 2 espacios al inicio de las dos rutas (`index` y `recibidas`) que están dentro de `solicitudes` |
-| `cliente/src/features/iniciativas/DetalleCompleto.jsx`, línea 14 | Quita 2 espacios: `    return (` queda `  return (` |
-
-```powershell
-git add servidor\src\services\reglas.js cliente\src\App.jsx cliente\src\features\iniciativas\DetalleCompleto.jsx
-git commit -m "Corregir comentarios y sangría en reglas, rutas y detalle" --trailer "Seccion: Calidad" --trailer "Cambio: Comentario de reglas.js y rutas anidadas legibles"
-git push
-```
-
----
-
-## Paso 5 · Crear `docs/seguridad.md`
-
-Tu README ya enlaza este archivo, pero todavía no existe. Créalo con este contenido completo:
-
-```markdown
-# Innovation Hub · Medidas de seguridad
-
-| Medida | Dónde |
-|---|---|
-| Contraseñas con bcrypt (12 rondas, sal por usuario) | `servidor/src/services/auth.service.js` |
-| `passwordHash` con `select: false` y serializadores con campos explícitos | `models/User.js`, `utils/serializadores.js` |
-| JWT HS256 con vencimiento de 2 h y `jti` | `auth.service.js` |
-| Logout con lista de revocación e índice TTL | `models/RevokedToken.js`, `middleware/autenticacion.js` |
-| Comparación contra hash falso cuando el correo no existe | `auth.service.js` |
-| CORS solo para `CLIENT_ORIGIN` | `app.js` |
-| Encabezados de seguridad con helmet; sin `x-powered-by` | `app.js` |
-| Cuerpo JSON limitado a 100 KB | `app.js` |
-| Validación a mano de query y body en cada ruta que recibe datos; los datos se copian campo por campo y lo desconocido se descarta | `validators/`, `middleware/validar.js` |
-| Errores con formato único, sin trazas ni mensajes de MongoDB | `middleware/manejadorErrores.js` |
-| Secretos en `.env`, fuera del repositorio | `.gitignore`, `.env.example` |
-
-## Autorización por punto de acceso
-
-| Punto de acceso | Verificación en el servidor |
-|---|---|
-| `GET /initiatives` | Filtro de visibilidad en la consulta; privadas solo para propietario o miembros |
-| `GET /initiatives/{id}` | `cargarVisible`: 404 privada ajena, 401 institucional sin sesión, proyección `summary` para restringidas |
-| `POST /initiatives` | Sesión; `ownerId` tomado del token, nunca del cuerpo |
-| `PUT`, `DELETE`, `archive` | `cargarPropia`: 403 si no es el propietario |
-| `GET …/members` | Acceso `full` |
-| `DELETE …/members/{userId}` | Propietario; no puede retirarse a sí mismo |
-| `POST …/requests` | Sesión, visibilidad, reglas en orden fijo, competencia en la intersección |
-| `GET /requests/mine` | Filtra por el usuario del token |
-| `GET /requests/received` | Solo iniciativas cuyo `ownerId` es el usuario del token |
-| `GET`, `PUT /requests/{id}`, `cancel` | Solicitante (y propietario para leer) |
-| `POST /requests/{id}/decision` | Propietario de la iniciativa de la solicitud |
-| `POST …/project` | Propietario y RN-17/RN-18 |
-| `GET /projects`, `/projects/{id}` | Acceso `full` a la iniciativa de origen |
-| `GET /users`, `/users/{id}` | Sesión; solo campos públicos |
-| `PUT /users/me` | Siempre el usuario del token; el correo no cambia |
-
-## Limitaciones conocidas
-
-- El token se guarda en `sessionStorage`; un XSS podría leerlo. React escapa el contenido y no se usa `dangerouslySetInnerHTML`.
-- La aceptación de solicitudes usa actualizaciones condicionales y compensación (ver `modelo-datos.md`). Funciona igual con MongoDB local y con Atlas; en SQL será una transacción.
-- No hay límite de intentos de login. La comparación contra un hash falso evita revelar qué correos existen; un límite por IP queda como mejora para la entrega final.
-- La búsqueda por texto usa expresiones regulares; con muchos datos convendría un índice de búsqueda dedicado.
-```
-
-```powershell
-git add docs\seguridad.md
-git commit -m "Documentar medidas de seguridad y autorización por punto de acceso" --trailer "Seccion: Documentación" --trailer "Cambio: Auditoría de seguridad del servidor"
-```
-
----
-
-## Paso 6 · `docs/modelo-datos.md`: atomicidad, porque usas Atlas
-
-En la sección **Atomicidad**, reemplaza el primer párrafo, el que empieza con "MongoDB instalado como
-servicio en Windows…", por:
-
-```markdown
-La aceptación de una solicitud toca dos documentos. En lugar de una transacción, se resuelve con
-actualizaciones condicionales y compensación. Así funciona igual con MongoDB local (servidor único,
-sin transacciones) y con Atlas:
-```
-
-Los pasos 1, 2 y 3 de esa sección, y la línea "En SQL este flujo será una transacción.", quedan igual.
-
-```powershell
-git add docs\modelo-datos.md
-git commit -m "Aclarar la atomicidad para MongoDB local y Atlas" --trailer "Seccion: Modelo de datos" --trailer "Cambio: La compensación funciona en ambos entornos"
-```
-
----
-
-## Paso 7 · Ajustes al `README.md`
-
-Tu README ya es el del Avance 2. Solo hay que hacerle estos cinco cambios:
-
-**7.1 Estructura**: la carpeta `herramientas/` está en `.gitignore`, así que quien clone el repo no la va a
-tener. Borra la línea `└── herramientas/    tabla de commits` y cambia la de `pruebas/` por:
-
-```
-└── pruebas/         colección y entorno de Postman + generador
-```
-
-**7.2 Requisitos (Windows)**: deja la lista así:
-
-```markdown
-- Node.js 20.6 o superior (los scripts cargan el `.env` con `--env-file`).
-- MongoDB: Community Server 8 instalado como servicio (con mongosh) **o** un clúster gratuito de MongoDB Atlas.
-- Git.
-```
-
-**7.3 1. Base de datos**: al final de la sección (después de "Si está detenido…"), agrega:
-
-````markdown
-**Con MongoDB Atlas:** crear un usuario de base de datos, agregar tu IP en *Network Access* y copiar
-la cadena de *Connect → Drivers*. En `servidor/.env` va con el nombre de la base antes del `?`:
-
-```
-MONGODB_URI=mongodb+srv://<usuario>:<contraseña>@<cluster>.mongodb.net/innovation_hub?retryWrites=true&w=majority
-```
-````
-
-**7.4 Tabla de variables**: en la fila `MONGODB_URI`, pon como valor:
-
-```markdown
-| `MONGODB_URI` | `mongodb://127.0.0.1:27017/innovation_hub` o la cadena de Atlas |
-```
-
-**7.5 Decisiones de diseño del Avance 2**: agrega al final de la lista:
-
-```markdown
-8. **Patrones de las prácticas de clase.** La validación del servidor está escrita a mano: cada función
-   devuelve un mensaje por campo y copia solo los campos permitidos. El `.env` se carga con `--env-file`.
-   Las dependencias del servidor son las de clase más las que exige el Avance 2: Mongoose, bcrypt,
-   JWT, helmet y morgan.
-9. **Alcance acotado a la consigna.** Sin límite de intentos de login ni filtros de miembros: no los
-   pide el Avance 2 y quedan como mejora para la entrega final.
-```
-
-```powershell
-git add README.md
-git commit -m "Actualizar el README con Atlas, Node 20.6 y las decisiones finales" --trailer "Seccion: Documentación" --trailer "Cambio: README del Avance 2 completo"
-git push
-```
-
----
-
-## Paso 8 · Revisión de pantallas, lint y build
-
-1. Recorre cada pantalla provocando sus tres estados. La tabla de pantallas es la de `Guia.md` 11.2, líneas 7761 a 7775:
-   - **Carga**: DevTools → Network → *Slow 3G*.
-   - **Error**: detén el servidor y recarga.
-   - **Vacío**: usa un filtro sin resultados.
-2. Navega con el teclado: Tab, Enter y Escape en los modales. Revisa también las pantallas a 390, 768 y 1280 px de ancho.
-3. En el formulario de iniciativa, **agrega dos competencias y quita una: tiene que pedir confirmación**.
-4. Lint y build:
-
-```powershell
-cd cliente
-npm run lint     # 0 errores y las 3 advertencias conocidas
-npm run build    # sin errores
-cd ..
-```
-
-Si corregiste algo, haz commit:
-
-```powershell
-git add cliente
-git commit -m "Revisar estados de interfaz, teclado y tamaños de pantalla" --trailer "Seccion: Cliente" --trailer "Cambio: Barrido final de estados, lint y build"
-git push
-```
-
-Si no cambiaste nada, no hagas commit. Git no permite un commit sin cambios, salvo con `--allow-empty`.
-
----
-
-## Paso 9 · Ensayo de la defensa (hoy en la tarde o noche)
-
-Desactiva Copilot, Claude y el autocompletado. Usa `Guia-defensa.md`, que ya está actualizada sin zod:
-
-1. **Recorridos en voz alta:** los cinco de la Parte 4, dos veces cada uno.
-2. **Modificaciones en caliente** (Parte 12), en una rama aparte. Empieza por M1, M5 y M10, que son validaciones con el nuevo estilo `if`:
-
-   ```powershell
-   git checkout -b practica-defensa
-   # … practicar …
-   git checkout -- .
-   git checkout main
-   git branch -D practica-defensa
+1. `cliente/src/features/iniciativas/FormularioIniciativaPage.jsx`, línea 145. El ejemplo de etiquetas pasa
+   de `placeholder="voluntariado"` a:
+   ```jsx
+   placeholder="ciberseguridad"
+   ```
+2. `servidor/src/repositories/usuarios.repository.js`, línea 26. El comentario queda así:
+   ```js
+     // Cada palabra debe aparecer en alguno de los nombres: "leonardo brenes" encuentra a Leonardo Brenes Arias.
    ```
 
-3. **Comparación con los labs:** lee la tabla de la sección 2 de `Simplificacion-segun-practicas.md`. Responde la pregunta "¿dónde está lo del lab X?".
+---
+
+## Paso 4 · README: tabla de usuarios de prueba
+
+En la sección **Usuarios de prueba**, reemplaza las cuatro filas por estas:
+
+```markdown
+| Leonardo Brenes | leonardo.brenes@ucenfotec.ac.cr | propietario con equipo; miembro de una privada |
+| Donatello Quirós | donatello.quiros@ucenfotec.ac.cr | propietario que recibe solicitudes |
+| Rafael Montero | rafael.montero@ucenfotec.ac.cr | solicitante; propietario de una privada |
+| Miguel Solano | miguel.solano@ucenfotec.ac.cr | propietario de una restringida |
+```
 
 ---
 
-## Domingo 8 · Entrega
+## Paso 5 · Cargar los datos nuevos en Atlas y probar
 
-### Paso 10 · Clon limpio siguiendo solo el README
-
-```powershell
-cd $env:USERPROFILE\Desktop
-git clone https://github.com/jose-ucenfotec/innovation-hub.git prueba-entrega
-cd prueba-entrega
-```
-
-1. Sigue las secciones 1 a 4 del README tal como están escritas. Para el `.env`, copia el tuyo de Atlas.
-2. Al final, `npm run test:api` tiene que dar 78 / 0.
-3. Si algo falla, corrige el README en tu repo original, haz commit y push, y vuelve a clonar.
-
-### Paso 11 · Flujo completo en la interfaz
-
-Recorre en este orden:
-1. Registro y editar el perfil con competencias.
-2. Catálogo con filtros y páginas, y publicar una iniciativa.
-3. Cerrar sesión y solicitar participación como otra persona.
-4. Aceptar la solicitud como propietario, ver el equipo y retirar a alguien.
-5. Convertir en proyecto con repositorio y ver los datos de GitHub.
-6. Cerrar sesión.
-
-### Paso 12 · Revisiones finales
+`npm run seed` **borra la base** y la vuelve a cargar, así que se pierden las iniciativas o usuarios que hayas
+creado a mano. Dentro de `servidor`:
 
 ```powershell
-git status                                    # sin cambios pendientes
-git ls-files | Select-String "\.env$"         # no debe aparecer ningún .env
-git log --oneline | Measure-Object            # 30 commits o más
+npm run seed      # debe listar leonardo.brenes, donatello.quiros, rafael.montero y miguel.solano
 ```
 
-### Paso 13 · Etiqueta y envío
-
-```powershell
-git tag -a entrega-2 -m "Avance 2: React, Express y MongoDB"
-git push origin main --tags
-git ls-remote --tags origin                   # deben aparecer entrega-1 y entrega-2
-```
-
-Crea `entrega-2.txt` con la URL del repositorio y súbelo a Moodle **antes de las 11:55 p. m.**
-
-Desde ese momento el contrato queda congelado. Cualquier práctica posterior va en una rama aparte.
-
-### Paso 14 · Dejar todo listo para la defensa
-
-- Atlas con `npm run seed` recién ejecutado.
-- El servidor corriendo con `npm start` y el cliente con `npm run dev`.
-- Postman con la colección y el entorno importados.
-- VS Code abierto en la raíz, **sin asistentes de IA**.
+Después:
+1. En una terminal: `npm start`.
+2. En otra, dentro de `servidor`: `npm run test:api`. Tiene que dar **78 peticiones y 0 fallos**.
+3. En el navegador, con el cliente en `npm run dev`:
+   - entra como `rafael.montero@ucenfotec.ac.cr`;
+   - abre *Laboratorio de práctica en la nube* y elige "Solicitar participación";
+   - solo debe aparecer la competencia "Gestión ágil (Scrum)", la única de la intersección.
+4. Si en Postman tenías importada la colección vieja, vuelve a importar
+   `pruebas/innovation-hub.postman_collection.json`.
 
 ---
 
-## Resumen de commits de hoy
+## Paso 6 · Commit
 
-| # | Mensaje | Seccion |
-|---|---|---|
-| 1 | Ajustar el contrato al alcance del Avance 2: sin filtros de miembros ni límite de login | Contrato |
-| 2 | Cargar el .env con --env-file de Node en lugar de dotenv | Servidor |
-| 3 | Validar la entrada a mano en lugar de usar zod | Servidor |
-| 4 | Corregir comentarios y sangría en reglas, rutas y detalle | Calidad |
-| 5 | Documentar medidas de seguridad y autorización por punto de acceso | Documentación |
-| 6 | Aclarar la atomicidad para MongoDB local y Atlas | Modelo de datos |
-| 7 | Actualizar el README con Atlas, Node 20.6 y las decisiones finales | Documentación |
-| 8 | Revisar estados de interfaz, teclado y tamaños de pantalla (solo si hubo cambios) | Cliente |
+```powershell
+git add servidor\src\seed\datos pruebas cliente\src\features\iniciativas\FormularioIniciativaPage.jsx servidor\src\repositories\usuarios.repository.js README.md
+git commit -m "Actualizar los datos de prueba con iniciativas y personas de Cenfotec" --trailer "Seccion: Datos" --trailer "Cambio: Seed y colección con temática de software, ciberseguridad, sistemas y diseño; mismos ids y relaciones"
+git push
+```
 
-Al terminar, el servidor queda con 7 dependencias: `express`, `cors`, `mongoose`, `bcryptjs`, `jsonwebtoken`,
-`helmet` y `morgan`. Además está `newman`, solo para desarrollo.
+---
+
+## Lo que ya actualicé por ti
+
+- **`Guia-defensa.md`:** tabla de datos, recorridos, modificaciones en caliente (M2, M4 y M7) y la demostración de
+  5 minutos, todo con los nombres y títulos nuevos. Ejemplos:
+  - M7 ahora se prueba con `GET /api/projects?q=red`.
+  - M4 se prueba como Rafael: ya tiene 1 pendiente en Mentorías; solicita en Mesa de ayuda y en Laboratorio en la
+    nube, y la del CTF da 409.
+- **`defensa-app/index.html`:** regenerada. Las 70 peticiones reales se volvieron a ejecutar con los datos nuevos,
+  y la tabla del seed y los flujos usan los nombres nuevos. Los números de línea no cambiaron.
